@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: cart-service
-        image: cart-service:latest
+        image: IMAGE_PLACEHOLDER
         ports:
         - containerPort: 8090
         env:
