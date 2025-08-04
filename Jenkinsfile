@@ -10,7 +10,7 @@ pipeline {
     stage('Clone Repo') {
       steps {
         checkout([$class: 'GitSCM',
-          branches: [[name: '*/main']],
+          branches: [[name: '*/master']],
           userRemoteConfigs: [[
             url: 'git@github.com:robertBoanta/CartService.git',
             credentialsId: 'cbe23c8d-51aa-4388-a14f-b81dfaea907e'
