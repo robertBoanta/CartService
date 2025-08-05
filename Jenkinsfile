@@ -32,7 +32,7 @@ pipeline {
           usernameVariable: 'DOCKER_USER',
           passwordVariable: 'DOCKER_PASS'
         )]) {
-          sh(script: 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin', shell: '/bin/bash')
+          sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
           sh "docker push $DOCKER_IMAGE"
         }
       }
@@ -40,16 +40,11 @@ pipeline {
 
     stage('Deploy to Kubernetes') {
       steps {
-        script {
-          // înlocuiește placeholder-ul cu imaginea corectă
-          sh "sed -i 's|IMAGE_PLACEHOLDER|$DOCKER_IMAGE|g' k8s/deployment.yaml"
-          
-          // aplică în Kubernetes
-          sh "kubectl apply -f k8s/"
-          
-          // opțional: scalează la 1 replica ca să eviți poduri pending
-          sh "kubectl scale deployment cart-service --replicas=1 || true"
-        }
+        sh """
+          sed -i 's|IMAGE_PLACEHOLDER|$DOCKER_IMAGE|g' k8s/deployment.yaml
+          kubectl apply -f k8s/
+          kubectl scale deployment cart-service --replicas=1 || true
+        """
       }
     }
   }
