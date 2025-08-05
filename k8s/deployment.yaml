@@ -58,5 +58,5 @@ data:
     spring.application.name=CartService
     server.port=8090
     management.endpoints.web.exposure.include=health,info
-    management.endpoint.health.show-details=when-authorized
+    management.endpoint.health.show-details=always
 
