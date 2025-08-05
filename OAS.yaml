@@ -1,0 +1,316 @@
+openapi: 3.1.0
+info:
+  title: Cart Service API
+  description: A microservice for managing shopping cart operations
+  version: 1.0.0
+  contact:
+    name: Cart Service Team
+    email: support@example.com
+servers:
+  - url: 'http://localhost:8080'
+    description: Development server
+  - url: 'https://api.example.com'
+    description: Production server
+
+paths:
+  /api/cart/getCartItems:
+    get:
+      summary: Get all items in the cart
+      description: Retrieves all products currently in the shopping cart with HATEOAS links
+      operationId: getCartItems
+      responses:
+        '200':
+          description: Successfully retrieved cart items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/cart/addToCart:
+    post:
+      summary: Add a product to the cart
+      description: Adds a product to the shopping cart by product ID
+      operationId: addToCart
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: The UUID of the product to add to cart
+          schema:
+            type: string
+            format: uuid
+            example: "e8098f40-10fe-2bc1-04ff-1382db45e2ba"
+      responses:
+        '200':
+          description: Product successfully added to cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Bad request - invalid product ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    CartResponse:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            productList:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+        _links:
+          $ref: '#/components/schemas/HateoasLinks'
+
+    Product:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+          example: "e8098f40-10fe-2bc1-04ff-1382db45e2ba"
+        code:
+          type: string
+          example: "21ML0033RI"
+        ean:
+          type: string
+          example: "197530889790"
+        title:
+          type: string
+          example: "Laptop Lenovo ThinkPad T14 Gen 5 (Intel)"
+        description:
+          type: string
+          example: "Laptop Lenovo ThinkPad T14 Gen 5 (Intel);14\" WUXGA (1920x1200) IPS 400nits..."
+        fullDescription:
+          type: string
+          nullable: true
+        minimumQuantity:
+          type: integer
+          minimum: 1
+          example: 1
+        manufacturerId:
+          type: string
+          format: uuid
+          example: "5a3b591e-aafa-28e1-4ffd-551ff5288202"
+        manufacturerName:
+          type: string
+          example: "LENOVO"
+        categoryLevel1Id:
+          type: string
+          format: uuid
+          nullable: true
+        categoryLevel1Name:
+          type: string
+          nullable: true
+        categoryLevel2Id:
+          type: string
+          format: uuid
+          nullable: true
+        categoryLevel2Name:
+          type: string
+          nullable: true
+        categoryLevel3Id:
+          type: string
+          format: uuid
+          nullable: true
+        categoryLevel3Name:
+          type: string
+          nullable: true
+        stock:
+          type: integer
+          minimum: 0
+          example: 0
+        reservedStock:
+          type: integer
+          minimum: 0
+          example: 0
+        supplierStock:
+          type: integer
+          minimum: 0
+          example: 0
+        supplierStockDeliveryDate:
+          type: string
+          format: date-time
+          nullable: true
+        price:
+          type: number
+          format: double
+          minimum: 0
+          example: 1620.65
+        promoPrice:
+          type: number
+          format: double
+          minimum: 0
+          example: 1620.65
+        greenStamp:
+          type: number
+          format: double
+          minimum: 0
+          example: 0.89
+        vatPercent:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 100
+          example: 19.00
+        isSpecialPrice:
+          type: boolean
+          example: false
+        length:
+          type: number
+          format: double
+          minimum: 0
+          example: 30.00
+        width:
+          type: number
+          format: double
+          minimum: 0
+          example: 8.00
+        height:
+          type: number
+          format: double
+          minimum: 0
+          example: 45.00
+        lengthUnitOfMeasure:
+          type: string
+          example: "CM"
+        weight:
+          type: number
+          format: double
+          minimum: 0
+          example: 2.40
+        weightUnitOfMeasure:
+          type: string
+          example: "KG"
+        isNew:
+          type: boolean
+          example: false
+        isEol:
+          type: boolean
+          example: false
+        isOnDemand:
+          type: boolean
+          example: true
+        onDemandDeliveryTime:
+          type: string
+          nullable: true
+        hasResealed:
+          type: boolean
+          example: false
+        originalProductId:
+          type: string
+          format: uuid
+          nullable: true
+        warranty:
+          type: integer
+          minimum: 0
+          example: 36
+        isActive:
+          type: boolean
+          example: true
+        version:
+          type: string
+          example: "83f7313ff522c4db5a95576da1646c61"
+        hasPriceRequest:
+          type: boolean
+          nullable: true
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
+        pictures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Picture'
+
+    Attribute:
+      type: object
+      properties:
+        attribute_name:
+          type: string
+          example: "NB-HDD-Capacity"
+        attribute_value:
+          type: string
+          example: "no-HDD"
+        attribute_name_id:
+          type: integer
+          example: 257
+        attribute_value_id:
+          type: integer
+          example: 981
+
+    Picture:
+      type: object
+      properties:
+        picture_id:
+          type: string
+          example: "4ebf8d8885deadee7a56c883bafef3d5"
+        picture_url:
+          type: string
+          format: uri
+          example: "https://cdn.b2b.nod.ro/images/overlay_4ebf8d8885deadee7a56c883bafef3d5.png"
+
+    HateoasLinks:
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/Link'
+        addToCart:
+          $ref: '#/components/schemas/Link'
+
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+          format: uri
+          example: "http://localhost:8080/api/cart/getCartItems"
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-08-05T10:15:30.00Z"
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Invalid product ID format"
+        path:
+          type: string
+          example: "/api/cart/addToCart"
+
+tags:
+  - name: Cart
+    description: Shopping cart operations
