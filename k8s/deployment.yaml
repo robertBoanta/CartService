@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cart-service
-  labels:
-    app: cart-service
 spec:
   replicas: 1
   selector:
@@ -15,48 +13,19 @@ spec:
         app: cart-service
     spec:
       containers:
-      - name: cart-service
-        image: IMAGE_PLACEHOLDER
-        ports:
-        - containerPort: 8090
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "prod"
-        - name: SERVER_PORT
-          value: "8090"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8090
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8090
-          initialDelaySeconds: 15
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 3
-      restartPolicy: Always
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cart-service-config
-data:
-  application.properties: |
-    spring.application.name=CartService
-    server.port=8090
-    management.endpoints.web.exposure.include=health,info
-    management.endpoint.health.show-details=always
-
+        - name: cart-service
+          image: IMAGE_PLACEHOLDER
+          ports:
+            - containerPort: 8090
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8090
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8090
+            initialDelaySeconds: 15
+            periodSeconds: 5
