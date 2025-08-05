@@ -7,10 +7,10 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 80
-    targetPort: 8090
-    protocol: TCP
-    name: http
+    - port: 80
+      targetPort: 8090
+      protocol: TCP
+      name: http
   selector:
     app: cart-service
 ---
@@ -23,11 +23,10 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 8090
-    targetPort: 8090
-    nodePort: 30090
-    protocol: TCP
-    name: http
+    - port: 8090
+      targetPort: 8090
+      nodePort: 30090
+      protocol: TCP
+      name: http
   selector:
     app: cart-service
-
