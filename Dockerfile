@@ -37,4 +37,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
-# Oare merge?
+# Oare merge acum?
