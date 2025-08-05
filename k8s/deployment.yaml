@@ -17,15 +17,27 @@ spec:
           image: IMAGE_PLACEHOLDER
           ports:
             - containerPort: 8090
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8090
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 12
           livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8090
+            initialDelaySeconds: 90
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8090
             initialDelaySeconds: 30
             periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8090
-            initialDelaySeconds: 15
-            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
