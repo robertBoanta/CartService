@@ -19,7 +19,7 @@ public class CartService {
 
 
     public Product fetchProduct(UUID id) {
-        String url = "http://localhost:8080/api/products/findById?id=" + id;
+        String url = "http://product-service-nodeport:8091/api/products/findById?id=" + id;
         return restTemplate.getForObject(url, Product.class);
     }
 
