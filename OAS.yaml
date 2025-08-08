@@ -7,11 +7,8 @@ info:
     name: Cart Service Team
     email: support@example.com
 servers:
-  - url: 'http://localhost:8080'
+  - url: 'http://localhost:8090'
     description: Development server
-  - url: 'https://api.example.com'
-    description: Production server
-
 paths:
   /api/cart/getCartItems:
     get:
