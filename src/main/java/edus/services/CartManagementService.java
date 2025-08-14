@@ -13,9 +13,9 @@ import java.util.List;
 public class CartManagementService {
 
     @SuppressWarnings("unchecked")
-    public List<Product> getCartItems(HttpServletRequest request) {
+    public ArrayList<Product> getCartItems(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
-        List<Product> cartItems = (List<Product>) session.getAttribute("cartItems");
+        ArrayList<Product> cartItems = (ArrayList<Product>) session.getAttribute("cartItems");
         if (cartItems == null) {
             cartItems = new ArrayList<>();
             session.setAttribute("cartItems", cartItems);

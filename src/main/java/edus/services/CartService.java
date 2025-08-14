@@ -2,6 +2,7 @@ package edus.services;
 
 
 import edus.models.Product;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,14 +24,14 @@ public class CartService {
         return restTemplate.getForObject(url, Product.class);
     }
 
-    public void addToCart(UUID id) {
+    public void addToCart(UUID id, HttpServletRequest request) {
        Product fetchedProduct = fetchProduct(id);
         if (fetchedProduct != null) {
-            cartManagementService.addToCart(fetchedProduct);
+            cartManagementService.addToCart(fetchedProduct, request);
         }
     }
 
-    public ArrayList<Product> getCartItems() {
-        return cartManagementService.getCartItems();
+    public ArrayList<Product> getCartItems(HttpServletRequest request) {
+        return cartManagementService.getCartItems(request);
     }
 }

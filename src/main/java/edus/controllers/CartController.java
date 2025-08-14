@@ -21,16 +21,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 public class CartController {
 
     @Autowired
-    private CartManagementService cartService;
+    private CartManagementService cartMService;
 
     @Autowired
-    private CartService cartService; // Assuming you have this
+    private CartService cartService;
 
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCart(@RequestParam String id, HttpServletRequest request) {
         try {
-            Product product = cartService.findById(UUID.fromString(id));
-            cartService.addToCart(product, request);
+            Product product = cartService.fetchProduct(UUID.fromString(id));
+            cartMService.addToCart(product, request);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error adding product to cart");
@@ -39,7 +39,7 @@ public class CartController {
 
     @GetMapping("/getCartItems")
     public ResponseEntity<List<Product>> getCartItems(HttpServletRequest request) {
-        List<Product> items = cartService.getCartItems(request);
+        List<Product> items = cartMService.getCartItems(request);
         return ResponseEntity.ok(items);
     }
 }
