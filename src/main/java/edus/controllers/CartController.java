@@ -2,6 +2,8 @@ package edus.controllers;
 
 import edus.models.Product;
 import edus.services.CartService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,20 +23,27 @@ public class CartController {
    }
 
     @GetMapping("/getCartItems")
-    public CollectionModel<Product> getCartItems() {
+    public CollectionModel<Product> getCartItems(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(true);
+
         ArrayList<Product> cartItems = cartService.getCartItems();
 
         return CollectionModel.of(cartItems)
-                .add(linkTo(methodOn(CartController.class).getCartItems()).withSelfRel())
+                .add(linkTo(methodOn(CartController.class).getCartItems(null)).withSelfRel())
                 .add(linkTo(CartController.class).slash("addToCart").withRel("addToCart"));
     }
 
     @PostMapping("/addToCart")
-    public CollectionModel<Product> addToCart(@RequestParam(name = "id", required = true) UUID id) {
+    public CollectionModel<Product> addToCart(@RequestParam(name = "id", required = true) UUID id
+            , HttpServletRequest request) {
+
+       HttpSession session = request.getSession(true);
+
         cartService.addToCart(id);
 
         return CollectionModel.of(cartService.getCartItems())
-                .add(linkTo(methodOn(CartController.class).addToCart(id)).withSelfRel())
-                .add(linkTo (CartController.class).slash("getCartItems").withRel("addToCart"));
+                .add(linkTo(methodOn(CartController.class).addToCart(id, null)).withSelfRel())
+                .add(linkTo (CartController.class).slash("getCartItems").withRel("getCartItems"));
     }
 }
